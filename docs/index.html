@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image Buttons</title>
+<style>
+  :root {
+    --bg: #0f1220;
+    --text: #f4f5fa;
+    --radius: 18px;
+    --speed: 0.4s;
+  }
+  * { box-sizing: border-box; margin: 0; }
+
+  body {
+    min-height: 100vh;
+    display: grid;
+    align-content: start;
+    gap: 40px;
+    padding: 32px 16px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  h1 { text-align: center; font-weight: 600; letter-spacing: .02em; }
+
+  /* Always at least 3 per row (even on tiny screens), up to 5 on wide ones.
+     Buttons shrink to fit rather than wrapping to fewer columns. */
+  .grid {
+    --size: 200px;   /* <-- button size: change this one number */
+    display: grid;
+    /* Fixed-size squares, as many per row as fit the screen */
+    grid-template-columns: repeat(auto-fill, var(--size));
+    /* Leftover space is spread into the gaps so the rows reach both edges exactly */
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+  }
+  .grid .img-btn { width: var(--size); }
+
+  /* The button (an <a>, so it can really redirect) */
+  .img-btn {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 1;
+    border-radius: var(--radius);
+    overflow: hidden;               /* keeps the zoomed image inside the rounded frame */
+    background: linear-gradient(135deg, #3a4bff, #b14bff); /* fallback if image fails */
+    box-shadow: 0 8px 24px rgba(0,0,0,.35);
+    transition: transform var(--speed) ease, box-shadow var(--speed) ease;
+    text-decoration: none;
+    color: inherit;
+    isolation: isolate;
+  }
+
+  .img-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--speed) cubic-bezier(.2,.7,.2,1),
+                opacity var(--speed) ease;
+  }
+
+  /* Label, hidden until hover */
+  .img-btn .label {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    gap: 6px;
+    text-align: center;
+    padding: 8px;
+    font-size: clamp(.85rem, 2.6vw, 1.75rem);
+    font-weight: 600;
+    text-shadow: 0 2px 12px rgba(0,0,0,.6);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity var(--speed) ease, transform var(--speed) ease;
+    pointer-events: none;
+  }
+  .img-btn .label small {
+    font-size: clamp(.6rem, 1.5vw, 1rem);
+    font-weight: 400;
+    opacity: .85;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  /* Hover + keyboard focus */
+  .img-btn:hover,
+  .img-btn:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0,0,0,.5);
+    outline: none;
+  }
+  .img-btn:hover img,
+  .img-btn:focus-visible img {
+    transform: scale(1.08);   /* slight zoom */
+    opacity: .55;             /* slightly translucent */
+  }
+  .img-btn:hover .label,
+  .img-btn:focus-visible .label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .img-btn:focus-visible { box-shadow: 0 0 0 3px #fff, 0 16px 36px rgba(0,0,0,.5); }
+
+  /* Touch devices have no hover: always show the label faintly */
+  @media (hover: none) {
+    .img-btn .label { opacity: 1; transform: none; background: linear-gradient(transparent 50%, rgba(0,0,0,.6)); place-content: end center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .img-btn, .img-btn img, .img-btn .label { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Where to?</h1>
+
+<nav class="grid">
+  <!-- Swap src for your own images and href for your own links -->
+  <a class="img-btn" href="https://example.com/home">
+    <img src="https://picsum.photos/id/1018/600/450" alt="">
+    <span class="label">Home<small>Go to homepage</small></span>
+  </a>
+
+  <a class="img-btn" href="https://example.com/gallery">
+    <img src="https://picsum.photos/id/1043/600/450" alt="">
+    <span class="label">Gallery<small>View photos</small></span>
+  </a>
+
+  <a class="img-btn" href="https://example.com/about">
+    <img src="https://picsum.photos/id/1025/600/450" alt="">
+    <span class="label">About<small>Learn more</small></span>
+  </a>
+
+  <a class="img-btn" href="https://example.com/contact">
+    <img src="https://picsum.photos/id/1062/600/450" alt="">
+    <span class="label">Contact<small>Get in touch</small></span>
+  </a>
+
+  <a class="img-btn" href="https://example.com/blog">
+    <img src="https://picsum.photos/id/1015/600/450" alt="">
+    <span class="label">Blog<small>Read posts</small></span>
+  </a>
+
+  <a class="img-btn" href="https://example.com/shop">
+    <img src="https://picsum.photos/id/1039/600/450" alt="">
+    <span class="label">Shop<small>Browse items</small></span>
+  </a>
+
+  <a class="img-btn" href="https://example.com/events">
+    <img src="https://picsum.photos/id/1036/600/450" alt="">
+    <span class="label">Events<small>See what's on</small></span>
+  </a>
+
+  <a class="img-btn" href="https://example.com/faq">
+    <img src="https://picsum.photos/id/1057/600/450" alt="">
+    <span class="label">FAQ<small>Get answers</small></span>
+  </a>
+
+  <a class="img-btn" href="https://example.com/team">
+    <img src="https://picsum.photos/id/1074/600/450" alt="">
+    <span class="label">Team<small>Meet us</small></span>
+  </a>
+
+  <a class="img-btn" href="https://example.com/news">
+    <img src="https://picsum.photos/id/1011/600/450" alt="">
+    <span class="label">News<small>Latest updates</small></span>
+  </a>
+</nav>
+
+</body>
+</html>
