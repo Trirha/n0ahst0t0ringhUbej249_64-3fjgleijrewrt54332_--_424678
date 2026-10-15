@@ -29,7 +29,7 @@
   /* Always at least 3 per row (even on tiny screens), up to 5 on wide ones.
      Buttons shrink to fit rather than wrapping to fewer columns. */
   .grid {
-    --size: 200px;   /* <-- button size: change this one number */
+    --size: 450px;   /* <-- button size: change this one number */
     --min-gap: 16px; /* smallest allowed space between buttons / edges */
     --gap: 16px;     /* set automatically by the script below */
     display: flex;
@@ -45,7 +45,7 @@
   .img-btn {
     position: relative;
     display: block;
-    aspect-ratio: 9 / 10;
+    aspect-ratio: 100 / 50;
     border-radius: var(--radius);
     overflow: hidden;               /* keeps the zoomed image inside the rounded frame */
     background: var(--bg); /* fallback if image fails */
