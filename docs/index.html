@@ -18,7 +18,7 @@
     display: grid;
     align-content: start;
     gap: 40px;
-    padding: 32px 16px;
+    padding: 32px 0;
     background: var(--bg);
     color: var(--text);
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -30,21 +30,22 @@
      Buttons shrink to fit rather than wrapping to fewer columns. */
   .grid {
     --size: 200px;   /* <-- button size: change this one number */
-    display: grid;
-    /* Fixed-size squares, as many per row as fit the screen */
-    grid-template-columns: repeat(auto-fill, var(--size));
-    /* Leftover space is spread into the gaps so the rows reach both edges exactly */
-    justify-content: space-between;
-    gap: 16px;
+    --min-gap: 16px; /* smallest allowed space between buttons / edges */
+    --gap: 16px;     /* set automatically by the script below */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;   /* a row with only 2 buttons sits in the middle */
+    gap: var(--gap);
+    padding: 0 var(--gap);     /* edge space = space between buttons */
     width: 100%;
   }
-  .grid .img-btn { width: var(--size); }
+  .grid .img-btn { width: var(--size); flex: none; }
 
   /* The button (an <a>, so it can really redirect) */
   .img-btn {
     position: relative;
     display: block;
-    aspect-ratio: 4 / 1;
+    aspect-ratio: 9 / 10;
     border-radius: var(--radius);
     overflow: hidden;               /* keeps the zoomed image inside the rounded frame */
     background: linear-gradient(135deg, #3a4bff, #b14bff); /* fallback if image fails */
@@ -124,19 +125,19 @@
 
 <nav class="grid">
   <!-- Swap src for your own images and href for your own links -->
-  <a class="img-btn" href="https://example.com/home">
-    <img src="https://picsum.photos/id/1018/600/450" alt="">
-    <span class="label">Home<small>Go to homepage</small></span>
+  <a class="img-btn" href="/website.xml">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR50SvkETI0wE5lNTc_prLxOVCLMx82oWTjnJ_vp5qtoQ&s=10" alt="">
+    <span class="label">Noah's<small>Tutoring Hub</small></span>
   </a>
 
-  <a class="img-btn" href="https://example.com/gallery">
+  <a class="img-btn" href="/website1.html">
     <img src="https://picsum.photos/id/1043/600/450" alt="">
-    <span class="label">Gallery<small>View photos</small></span>
+    <span class="label">Interstellar<small>Web Proxy</small></span>
   </a>
 
-  <a class="img-btn" href="https://example.com/about">
-    <img src="https://picsum.photos/id/1025/600/450" alt="">
-    <span class="label">About<small>Learn more</small></span>
+  <a class="img-btn" href="/website2.xml">
+    <img src="https://cdn.jsdelivr.net/gh/DogeNetwork/v5-assets/logo.svg" alt="">
+    <span class="label">Dogeub<small>Web Proxy</small></span>
   </a>
 
   <a class="img-btn" href="https://example.com/contact">
@@ -174,6 +175,23 @@
     <span class="label">News<small>Latest updates</small></span>
   </a>
 </nav>
+
+<script>
+  // Work out how many buttons fit per row, then split the leftover width into
+  // equal spaces: left edge | button | gap | button | ... | right edge.
+  const grid = document.querySelector('.grid');
+  function fit() {
+    const cs = getComputedStyle(grid);
+    const size = parseFloat(cs.getPropertyValue('--size'));
+    const minGap = parseFloat(cs.getPropertyValue('--min-gap'));
+    const width = grid.parentElement.clientWidth;
+    const cols = Math.max(1, Math.floor((width - minGap) / (size + minGap)));
+    const gap = Math.floor(((width - cols * size) / (cols + 1)) * 100) / 100 - 0.01;
+    grid.style.setProperty('--gap', Math.max(gap, 0) + 'px');
+  }
+  fit();
+  addEventListener('resize', fit);
+</script>
 
 </body>
 </html>
